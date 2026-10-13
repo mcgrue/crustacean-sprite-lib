@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Crustacean Sprite Library — Lord Stan</title>
+<style>
+  body { font: 16px system-ui; max-width: 800px; margin: 3rem auto; padding: 0 1rem; background: #182025; color: #eee; }
+  canvas { display: block; background: #29383e; image-rendering: pixelated; margin: 1rem 0; }
+  button, select { padding: .4rem; margin-right: .5rem; }
+</style>
+<h1>Lord Stan</h1>
+<label>Animation <select id="animation"></select></label>
+<button id="pause">Pause</button><button id="restart">Restart</button>
+<canvas id="sprite" width="480" height="320"></canvas>
+<output id="status">Loading…</output>
+<script type="module" src="./main.js"></script>
+</html>

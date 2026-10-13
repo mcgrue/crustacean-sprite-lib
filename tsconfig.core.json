@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": { "lib": ["ES2022"], "noEmit": true },
+  "files": ["src/mod.ts"],
+  "include": []
+}

@@ -1,0 +1,271 @@
+{
+  "revision": "371bbfd5674f245437d215ebbc0ad639daf69a58",
+  "evidence": "source-assertion",
+  "extracted": "2026-10-13",
+  "algorithm": "SHA-256",
+  "hashes": {
+    "src/sprite.cpp": "389b1ef637e16fbe790544367e352c520d0ccba2e4ded3b6c224b97010a0f8f1",
+    "src/sprite_crustacean.h": "3818e1b9a56945e9b05c3221386527523344ad459ca7cf29643b180a19bce091",
+    "src/sprite_crustacean_data.h": "c2727e4af67ec970057e07c79ef4f4e66f866dc2dc49dcf451f87bea6480448a",
+    "src/sprite_crustacean_state.cpp": "cfffa8ad8b50503254a8414c269dbfbf4c85488b7ad29c85d99192ad7a309dba",
+    "src/sprite_crustacean_state.h": "2ce744f3539f694780e078c318fd71f46d406162d4a5b1debfabed97f77af568",
+    "src/bob.cpp": "1507bb60095aa99a641c3a45743fe9c6302d029e25d37f312d970fe05a150cba",
+    "src/Include/tracery/tracery.cpp": "4f66c5dcd6703bc14483b8f6b48646a1bb3bde1b2df42508874e403580c5c9fc",
+    "src/legacy_sprite_parity_audit.cpp": "a7dead79590449226d8a5673e876e7dbe419b2e794f632a93ca990b7445d96f2",
+    "test/atlas_sprite_test.cpp": "658a8c33718970d86a9a1d7c26dd2ef981799e8b333fea1a0c48308c5bbfa9f9",
+    "test/crustacean-static-random-animation-test.cpp": "be0370e20be5490f018bfe3f48f3194d6b845d83bc31fc93620ff38ea3102d9f",
+    "test/crustacean-playback-invariance-regression-test.cpp": "b441d275aaf1515b130eb8469d6659e8845894a3dcfd9c563c6582e873e71bcc",
+    "test/crusty-main-contract-regression-test.cpp": "500566201ae22d299ec4b0d0ef3beaf80c2697ca9aa87055974b3787fd7f9954",
+    "test/crusty-playback-feature-test.cpp": "bdf4288e67668efdcfe97412398c50c117f566caf24c9f344e1dbc23f891cf55",
+    "test/crustacean-completion-transition-test.cpp": "9dd3d5bedc6134750d3e81108f462145ee2b0f8d8a17e4b4f2dec98b01900e2a",
+    "test/crusty-load-failure-test.cpp": "00c017f318ee4f310102e0f2d2e2562e7af58c3aa6931d52c8e8f334cabc107e",
+    "test/crusty-structural-audit-regression-test.cpp": "30b2d953b73961f14c79fb46ef8b50728c037f0cd7fc68bdb56f5cd0f1fc1303",
+    "test/crusty-test.cpp": "b5ffe0561f829c03fe4b3bcd70feb0d7e0c72b3fdc55a53cebe8c82b39bc9b95",
+    "test/crusty-cache-provenance-red-test.cpp": "e13c1cccb37557dfec733e3e5c2d860c66ad821dc12c360c7e81ac8eb0e5bba5",
+    "test/crusty-background-loading-regression-test.cpp": "5669cd857971935a9781811598b7e7597f5a47006b88d9892b4dc1fa70f49a1b",
+    "test/resources/atlas_sprites/parsing/lord_stan.json": "795ea0d592335d57baeea0a433d9760331c35f13a6ac207ab64d90739fc5417d",
+    "test/resources/atlas_sprites/parsing/lord_stan.png": "91f1310f58d7e0289de0309d09b447fc1f9e7762b7ba17376bac7dab61717ef5",
+    "test/resources/atlas_sprites/parsing/lord_stan_2.json": "22a362c54c7d196b69c7527171287bd8da5bb05b40976967939fb74405738afd",
+    "test/resources/atlas_sprites/parsing/lord_stan_3.json": "0022692cb60bdb1cd144a5da920a1b77784fe44c23979f93edd93a3d9cd806e7",
+    "test/resources/atlas_sprites/parsing/static_random.json": "85a74ff93de1da355eea99cd36f66b111de285dae174ac882097fd8391873996",
+    "test/resources/atlas_sprites/parsing_palette/hero_atk_axe_d.spr.json": "012b0b28f07db0262f9f84d83d10de6db4a7f81d0fe232b40935fb6a17816f8f"
+  },
+  "inventory": [
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "images_are_equal happiest path"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "images_are_equal fails if a file doesnt exist"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "images_are_equal fails both files exist but have different dims"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "images_are_equal passes when both files exist but have different bit depths because low bitdepth gets promoted"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "images_are_equal fails with slightly different images"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "load fails if an animation references a frame beyond the maximum frame of the sprite"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "Looping, no skipsies."
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "Looping, with skipsies."
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "Static"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "Looping"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "BackAndForth"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "BackAndForth Bigger"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "Once"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "Random"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "Single timing, conjoined T"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "Single timing, seperate T"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "Multiple timing, conjoined T"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "Multiple timing, seperate T"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "parses multiple whitespaces in a row cleanly"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "ignores tabs"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "lord_stan_2.json - the simplest one"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "lord_stan_3.json - the other simplest one"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "lord_stan_1.json - EVERY ANIMATION FORMAT"
+    },
+    {
+      "source": "test/atlas_sprite_test.cpp",
+      "assertion": "hero_atk_axe_d.spr.json"
+    },
+    {
+      "source": "test/crustacean-static-random-animation-test.cpp",
+      "assertion": "JSON rows parse a non-empty list of static frame candidates"
+    },
+    {
+      "source": "test/crustacean-static-random-animation-test.cpp",
+      "assertion": "choosing the animation rolls once and keeps the selected frame static"
+    },
+    {
+      "source": "test/crustacean-static-random-animation-test.cpp",
+      "assertion": "the non-empty bookshelf uses StaticRandom across its three full frames"
+    },
+    {
+      "source": "test/crustacean-playback-invariance-regression-test.cpp",
+      "assertion": "global speed uses the same authored-frame quantization for both Bob playheads"
+    },
+    {
+      "source": "test/crustacean-playback-invariance-regression-test.cpp",
+      "assertion": "uneven looping instructions retain the same phase after a complete cycle"
+    },
+    {
+      "source": "test/crustacean-playback-invariance-regression-test.cpp",
+      "assertion": "uneven looping instructions agree for each elapsed partition"
+    },
+    {
+      "source": "test/crustacean-playback-invariance-regression-test.cpp",
+      "assertion": "completed Once playback remains at its terminal instruction"
+    },
+    {
+      "source": "test/crusty-main-contract-regression-test.cpp",
+      "assertion": "three one-ms instructions advance at every exact boundary"
+    },
+    {
+      "source": "test/crusty-main-contract-regression-test.cpp",
+      "assertion": "binding immediately projects the requested initial instruction"
+    },
+    {
+      "source": "test/crusty-main-contract-regression-test.cpp",
+      "assertion": "selecting the same binding preserves its generation and progress"
+    },
+    {
+      "source": "test/crusty-main-contract-regression-test.cpp",
+      "assertion": "monster roles on one atlas select different keys"
+    },
+    {
+      "source": "test/crusty-main-contract-regression-test.cpp",
+      "assertion": "both playheads apply per-instruction speed quantization once"
+    },
+    {
+      "source": "test/crusty-main-contract-regression-test.cpp",
+      "assertion": "StaticRandom is recognized by the JSON animation mode parser"
+    },
+    {
+      "source": "test/crusty-main-contract-regression-test.cpp",
+      "assertion": "missing Crusty content returns a recoverable load failure"
+    },
+    {
+      "source": "test/crusty-main-contract-regression-test.cpp",
+      "assertion": "a large legacy delta retains all elapsed time"
+    },
+    {
+      "source": "test/crusty-main-contract-regression-test.cpp",
+      "assertion": "invalid animation binding preserves the old state in an isolated child"
+    },
+    {
+      "source": "test/crusty-playback-feature-test.cpp",
+      "assertion": "StaticRandom selects on entry and explicit restart but never on identical binding"
+    },
+    {
+      "source": "test/crusty-playback-feature-test.cpp",
+      "assertion": "Once chains retain final dwell and carry elapsed time into a terminal static state"
+    },
+    {
+      "source": "test/crusty-playback-feature-test.cpp",
+      "assertion": "a paused Bob consumes no time even for a maximum delta"
+    },
+    {
+      "source": "test/crusty-playback-feature-test.cpp",
+      "assertion": "legacy animation enum values stay stable"
+    },
+    {
+      "source": "test/crustacean-completion-transition-test.cpp",
+      "assertion": "Blobby dying completes into dead and holds the static frame"
+    },
+    {
+      "source": "test/crustacean-completion-transition-test.cpp",
+      "assertion": "on_complete accepts a valid Once target and rejects invalid values"
+    },
+    {
+      "source": "test/crustacean-completion-transition-test.cpp",
+      "assertion": "completion chains cannot cycle"
+    },
+    {
+      "source": "test/crusty-load-failure-test.cpp",
+      "assertion": "a missing JSON file returns no sprite"
+    },
+    {
+      "source": "test/crusty-load-failure-test.cpp",
+      "assertion": "a JSON file with a missing atlas returns no sprite"
+    },
+    {
+      "source": "test/crusty-load-failure-test.cpp",
+      "assertion": "malformed JSON returns no sprite"
+    },
+    {
+      "source": "test/crusty-load-failure-test.cpp",
+      "assertion": "a missing animation key leaves the current fallback sprite unchanged"
+    },
+    {
+      "source": "test/crusty-load-failure-test.cpp",
+      "assertion": "an omitted animation still selects a sprite's sole animation"
+    },
+    {
+      "source": "test/crusty-structural-audit-regression-test.cpp",
+      "assertion": "the filesystem audit rejects unloadable animation definitions"
+    },
+    {
+      "source": "test/crusty-test.cpp",
+      "assertion": "we only spawn one sprite per filename/scalefactor pairing ever"
+    },
+    {
+      "source": "test/crusty-cache-provenance-red-test.cpp",
+      "assertion": "a same-path JSON override does not reuse a cached shipped sprite"
+    },
+    {
+      "source": "test/crusty-cache-provenance-red-test.cpp",
+      "assertion": "an atlas-only override does not reuse a cached shipped sprite"
+    },
+    {
+      "source": "test/crusty-background-loading-regression-test.cpp",
+      "assertion": "worker loading preserves animation metadata and defers GPU frames until renderer completion"
+    },
+    {
+      "source": "test/crusty-background-loading-regression-test.cpp",
+      "assertion": "scaled worker loading matches renderer loading"
+    },
+    {
+      "source": "test/crusty-background-loading-regression-test.cpp",
+      "assertion": "loading without a renderer waits and destroying a pending sprite cancels completion"
+    }
+  ]
+}

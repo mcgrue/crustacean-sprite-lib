@@ -1,0 +1,26 @@
+{ // This is a munged version of stan to show a valid v1.  The animations are specifically all over the place.
+  "version": 1,
+
+  "animations": {
+    "static_lord_stan_2": [ "19", "Static" ]
+  },
+
+  "dims": {
+    "width": 48,
+    "height": 49
+  },
+
+  // the other valid hitbox!
+  "hitbox": {
+    "x":       50,
+    "y":       51,
+    "width":   52,
+    "height":  53
+  },
+
+  "frames": 28,
+  "image": "lord_stan.png", // relative to this file
+  "inner_pad": 1, // in px
+  "outer_pad": 2,
+  "per_row": 7
+}

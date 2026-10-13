@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "animations": {
+    "full": [[1, 2, 3], "StaticRandom"]
+  },
+  "dims": [48, 48],
+  "hitbox": [0, 0, 48, 48],
+  "frames": 28,
+  "image": "lord_stan.png",
+  "inner_pad": 0,
+  "outer_pad": 0,
+  "per_row": 7
+}

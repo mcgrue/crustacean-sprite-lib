@@ -1,0 +1,67 @@
+{
+  "evidence": "executed-cpp-isolated-playback",
+  "revision": "371bbfd5674f245437d215ebbc0ad639daf69a58",
+  "compiler": "clang version 19.1.5\nTarget: x86_64-pc-windows-msvc\nThread model: posix\nInstalledDir: C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\Llvm\\x64\\bin",
+  "command": [
+    "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/Llvm/x64/bin/clang++.exe",
+    "-std=c++17",
+    "-isystem",
+    "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/include",
+    "main.cpp",
+    "sprite_crustacean_state.cpp",
+    "-o",
+    "D:\\dev\\grue\\crustacean-sprite-lib\\.build\\cpp-e0547c0f-5e3c-4894-b4e1-4f52dc5e2280\\traces.exe"
+  ],
+  "hashes": {
+    "sprite_crustacean_state.cpp": "cfffa8ad8b50503254a8414c269dbfbf4c85488b7ad29c85d99192ad7a309dba",
+    "sprite_crustacean_state.h": "2ce744f3539f694780e078c318fd71f46d406162d4a5b1debfabed97f77af568",
+    "sprite_crustacean.h": "3818e1b9a56945e9b05c3221386527523344ad459ca7cf29643b180a19bce091",
+    "sprite_crustacean_data.h": "c2727e4af67ec970057e07c79ef4f4e66f866dc2dc49dcf451f87bea6480448a",
+    "direction.h": "0b396c9703085a2d4016d6c73c72a767fb329274c37b16a0240e1c8b7b68c300"
+  },
+  "stubs": {
+    "bob.h": "#pragma once\n#include <cassert>\n#include <cstdlib>\n#include <tuple>\nstruct Bob {};\n#define SDL_assert(x) assert(x)\n",
+    "log.h": "#pragma once\n#define LOG(...) ((void)0)\n",
+    "platform.h": "#pragma once\n#include <string>\ninline void public_platform_dialog(std::string const&, std::string const&) {}\n",
+    "random.h": "#pragma once\n#include <cstddef>\ninline std::size_t random2(std::size_t) { return 0; }\n"
+  },
+  "traces": [
+    {
+      "name": "uneven",
+      "frame": 1,
+      "step": 4,
+      "remainingMs": 2
+    },
+    {
+      "name": "once",
+      "frame": 2,
+      "step": 3,
+      "remainingMs": 0
+    },
+    {
+      "name": "quantized",
+      "frame": 1,
+      "step": 1,
+      "remainingMs": 37
+    },
+    {
+      "name": "speed-carry",
+      "frame": 1,
+      "step": 1,
+      "remainingMs": 52
+    },
+    {
+      "name": "ping",
+      "frame": 1,
+      "step": 3,
+      "remainingMs": 6
+    },
+    {
+      "name": "held-random",
+      "frame": 2,
+      "step": 3,
+      "remainingMs": 100
+    }
+  ],
+  "limitation": "Production state code compiled unchanged. Bob/SDL/logging/RNG integrations stubbed; no full-game, parser, or RNG parity claim."
+}

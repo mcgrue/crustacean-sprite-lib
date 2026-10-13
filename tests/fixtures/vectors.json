@@ -1,0 +1,34 @@
+[
+  {
+    "name": "uneven full-period partial phase",
+    "evidence": "source-assertion",
+    "source": "test/crustacean-playback-invariance-regression-test.cpp",
+    "mode": "Looping", "pairs": [[0,5],[1,7],[2,11]],
+    "operations": [{"delta":10,"speed":1},{"delta":23,"speed":1}],
+    "expected": {"key":"a","frame":1,"step":4,"remainingMs":2,"status":"playing","generation":1}
+  },
+  {
+    "name": "terminal Once stability",
+    "evidence": "source-assertion",
+    "source": "test/crustacean-playback-invariance-regression-test.cpp",
+    "mode": "Once", "pairs": [[0,5],[1,7],[2,11]],
+    "operations": [{"delta":23,"speed":1},{"delta":200,"speed":1},{"delta":0,"speed":1}],
+    "expected": {"key":"a","frame":2,"step":3,"remainingMs":0,"status":"finished","generation":1}
+  },
+  {
+    "name": "75 ms quantizes to 37 ms at speed two",
+    "evidence": "source-assertion",
+    "source": "test/crustacean-playback-invariance-regression-test.cpp",
+    "mode": "Looping", "pairs": [[0,75],[1,75]],
+    "operations": [{"delta":37,"speed":2}],
+    "expected": {"key":"a","frame":1,"step":1,"remainingMs":37,"status":"playing","generation":1}
+  },
+  {
+    "name": "mid-dwell speed shortening carry",
+    "evidence": "source-derived",
+    "source": "src/sprite_crustacean_state.cpp:advance_by_n_ms",
+    "mode": "Looping", "pairs": [[0,75],[1,75],[2,75]],
+    "operations": [{"delta":60,"speed":1},{"delta":0,"speed":2},{"delta":0,"speed":1}],
+    "expected": {"key":"a","frame":1,"step":1,"remainingMs":52,"status":"playing","generation":1}
+  }
+]

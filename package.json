@@ -1,0 +1,26 @@
+{
+  "name": "crustacean-sprite-lib",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": false,
+  "types": "./dist/mod.d.ts",
+  "exports": {
+    ".": { "types": "./dist/mod.d.ts", "import": "./dist/mod.js" },
+    "./load": { "types": "./dist/load.d.ts", "import": "./dist/load.js" },
+    "./canvas2d": {
+      "types": "./dist/canvas2d.d.ts",
+      "import": "./dist/canvas2d.js"
+    },
+    "./assets/lord-stan/*": "./assets/lord-stan/*"
+  },
+  "files": [
+    "dist",
+    "src",
+    "assets/lord-stan",
+    "README.md",
+    "LICENSE",
+    "ASSET-ATTRIBUTION.md"
+  ],
+  "engines": { "node": ">=22" }
+}

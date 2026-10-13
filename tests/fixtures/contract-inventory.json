@@ -1,0 +1,444 @@
+[
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "images_are_equal happiest path",
+    "exclusion": "C++ test-helper image comparator/bit-depth normalization; not a public library API. Chromium pixel assertions cover library rendering."
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "images_are_equal fails if a file doesnt exist",
+    "exclusion": "C++ test-helper image comparator/bit-depth normalization; not a public library API. Chromium pixel assertions cover library rendering."
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "images_are_equal fails both files exist but have different dims",
+    "exclusion": "C++ test-helper image comparator/bit-depth normalization; not a public library API. Chromium pixel assertions cover library rendering."
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "images_are_equal passes when both files exist but have different bit depths because low bitdepth gets promoted",
+    "exclusion": "C++ test-helper image comparator/bit-depth normalization; not a public library API. Chromium pixel assertions cover library rendering."
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "images_are_equal fails with slightly different images",
+    "exclusion": "C++ test-helper image comparator/bit-depth normalization; not a public library API. Chromium pixel assertions cover library rendering."
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "load fails if an animation references a frame beyond the maximum frame of the sprite",
+    "coverage": [
+      "tests/unit/parse_test.ts:reject row 3 with field path"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "Looping, no skipsies.",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame, one-ms boundaries; bounded reference stepper; final dwell; single-candidate Random/StaticRandom hold"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "Looping, with skipsies.",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame, one-ms boundaries; bounded reference stepper; final dwell; single-candidate Random/StaticRandom hold"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "Static",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame, one-ms boundaries; bounded reference stepper; final dwell; single-candidate Random/StaticRandom hold"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "Looping",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame, one-ms boundaries; bounded reference stepper; final dwell; single-candidate Random/StaticRandom hold"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "BackAndForth",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame, one-ms boundaries; bounded reference stepper; final dwell; single-candidate Random/StaticRandom hold"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "BackAndForth Bigger",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame, one-ms boundaries; bounded reference stepper; final dwell; single-candidate Random/StaticRandom hold"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "Once",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame, one-ms boundaries; bounded reference stepper; final dwell; single-candidate Random/StaticRandom hold"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "Random",
+    "coverage": [
+      "tests/unit/player_test.ts:Random exact draw counts, duplicates, residual dwell and partitions"
+    ],
+    "deviation": "Timed Random selects on entry and rerolls at each boundary; C++ holds its first instruction."
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "Single timing, conjoined T",
+    "coverage": [
+      "tests/unit/parse_test.ts:timed notation",
+      "tests/conformance/reference_test.ts:Lord Stan all notation metadata"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "Single timing, seperate T",
+    "coverage": [
+      "tests/unit/parse_test.ts:timed notation",
+      "tests/conformance/reference_test.ts:Lord Stan all notation metadata"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "Multiple timing, conjoined T",
+    "coverage": [
+      "tests/unit/parse_test.ts:timed notation",
+      "tests/conformance/reference_test.ts:Lord Stan all notation metadata"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "Multiple timing, seperate T",
+    "coverage": [
+      "tests/unit/parse_test.ts:timed notation",
+      "tests/conformance/reference_test.ts:Lord Stan all notation metadata"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "parses multiple whitespaces in a row cleanly",
+    "coverage": [
+      "tests/unit/parse_test.ts:timed notation",
+      "tests/conformance/reference_test.ts:Lord Stan all notation metadata"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "ignores tabs",
+    "coverage": [
+      "tests/unit/parse_test.ts:timed notation",
+      "tests/conformance/reference_test.ts:Lord Stan all notation metadata"
+    ]
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "lord_stan_2.json - the simplest one",
+    "coverage": [
+      "tests/conformance/reference_test.ts:Lord Stan/alternate metadata/palette fixtures",
+      "tests/browser/canvas_test.ts:Chromium crop and transform pixels"
+    ],
+    "exclusion": "SDL renderer golden output, outlines, palette replacement and special 2x filter are outside v1; Canvas pixel output tested independently."
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "lord_stan_3.json - the other simplest one",
+    "coverage": [
+      "tests/conformance/reference_test.ts:Lord Stan/alternate metadata/palette fixtures",
+      "tests/browser/canvas_test.ts:Chromium crop and transform pixels"
+    ],
+    "exclusion": "SDL renderer golden output, outlines, palette replacement and special 2x filter are outside v1; Canvas pixel output tested independently."
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "lord_stan_1.json - EVERY ANIMATION FORMAT",
+    "coverage": [
+      "tests/conformance/reference_test.ts:Lord Stan/alternate metadata/palette fixtures",
+      "tests/browser/canvas_test.ts:Chromium crop and transform pixels"
+    ],
+    "exclusion": "SDL renderer golden output, outlines, palette replacement and special 2x filter are outside v1; Canvas pixel output tested independently."
+  },
+  {
+    "source": "test/atlas_sprite_test.cpp",
+    "assertion": "hero_atk_axe_d.spr.json",
+    "coverage": [
+      "tests/conformance/reference_test.ts:Lord Stan/alternate metadata/palette fixtures",
+      "tests/browser/canvas_test.ts:Chromium crop and transform pixels"
+    ],
+    "exclusion": "SDL renderer golden output, outlines, palette replacement and special 2x filter are outside v1; Canvas pixel output tested independently."
+  },
+  {
+    "source": "test/crustacean-static-random-animation-test.cpp",
+    "assertion": "JSON rows parse a non-empty list of static frame candidates",
+    "coverage": [
+      "tests/conformance/reference_test.ts:StaticRandom and palette fixtures",
+      "tests/unit/player_test.ts:single-candidate Random draws every boundary; StaticRandom holds"
+    ]
+  },
+  {
+    "source": "test/crustacean-static-random-animation-test.cpp",
+    "assertion": "choosing the animation rolls once and keeps the selected frame static",
+    "coverage": [
+      "tests/conformance/reference_test.ts:StaticRandom and palette fixtures",
+      "tests/unit/player_test.ts:single-candidate Random draws every boundary; StaticRandom holds"
+    ]
+  },
+  {
+    "source": "test/crustacean-static-random-animation-test.cpp",
+    "assertion": "the non-empty bookshelf uses StaticRandom across its three full frames",
+    "coverage": [
+      "tests/conformance/reference_test.ts:StaticRandom and palette fixtures",
+      "tests/unit/player_test.ts:single-candidate Random draws every boundary; StaticRandom holds"
+    ],
+    "exclusion": "Dredmor bookshelf asset/caller adoption is outside this standalone library; candidate parsing/selection/hold are covered."
+  },
+  {
+    "source": "test/crustacean-playback-invariance-regression-test.cpp",
+    "assertion": "global speed uses the same authored-frame quantization for both Bob playheads",
+    "coverage": [
+      "tests/unit/player_test.ts:uneven periods; elapsed partitions and bounded reference stepper; speed quantization; final dwell"
+    ]
+  },
+  {
+    "source": "test/crustacean-playback-invariance-regression-test.cpp",
+    "assertion": "uneven looping instructions retain the same phase after a complete cycle",
+    "coverage": [
+      "tests/unit/player_test.ts:uneven periods; elapsed partitions and bounded reference stepper; speed quantization; final dwell"
+    ]
+  },
+  {
+    "source": "test/crustacean-playback-invariance-regression-test.cpp",
+    "assertion": "uneven looping instructions agree for each elapsed partition",
+    "coverage": [
+      "tests/unit/player_test.ts:uneven periods; elapsed partitions and bounded reference stepper; speed quantization; final dwell"
+    ]
+  },
+  {
+    "source": "test/crustacean-playback-invariance-regression-test.cpp",
+    "assertion": "completed Once playback remains at its terminal instruction",
+    "coverage": [
+      "tests/unit/player_test.ts:uneven periods; elapsed partitions and bounded reference stepper; speed quantization; final dwell"
+    ]
+  },
+  {
+    "source": "test/crusty-main-contract-regression-test.cpp",
+    "assertion": "three one-ms instructions advance at every exact boundary",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame; independent clocks; idempotent binding; speed quantization; invalid numeric updates",
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures"
+    ]
+  },
+  {
+    "source": "test/crusty-main-contract-regression-test.cpp",
+    "assertion": "binding immediately projects the requested initial instruction",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame; independent clocks; idempotent binding; speed quantization; invalid numeric updates",
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures"
+    ]
+  },
+  {
+    "source": "test/crusty-main-contract-regression-test.cpp",
+    "assertion": "selecting the same binding preserves its generation and progress",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame; independent clocks; idempotent binding; speed quantization; invalid numeric updates",
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures"
+    ]
+  },
+  {
+    "source": "test/crusty-main-contract-regression-test.cpp",
+    "assertion": "monster roles on one atlas select different keys",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame; independent clocks; idempotent binding; speed quantization; invalid numeric updates",
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures"
+    ],
+    "exclusion": "Monster role lifecycle is outside v1; independent players and named selections are covered."
+  },
+  {
+    "source": "test/crusty-main-contract-regression-test.cpp",
+    "assertion": "both playheads apply per-instruction speed quantization once",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame; independent clocks; idempotent binding; speed quantization; invalid numeric updates",
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures"
+    ]
+  },
+  {
+    "source": "test/crusty-main-contract-regression-test.cpp",
+    "assertion": "StaticRandom is recognized by the JSON animation mode parser",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame; independent clocks; idempotent binding; speed quantization; invalid numeric updates",
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures"
+    ]
+  },
+  {
+    "source": "test/crusty-main-contract-regression-test.cpp",
+    "assertion": "missing Crusty content returns a recoverable load failure",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame; independent clocks; idempotent binding; speed quantization; invalid numeric updates",
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures"
+    ]
+  },
+  {
+    "source": "test/crusty-main-contract-regression-test.cpp",
+    "assertion": "a large legacy delta retains all elapsed time",
+    "exclusion": "Legacy Bob playhead is not implemented. Library large safe-integer deltas are covered by invalid RNG and numeric updates leave state unchanged."
+  },
+  {
+    "source": "test/crusty-main-contract-regression-test.cpp",
+    "assertion": "invalid animation binding preserves the old state in an isolated child",
+    "coverage": [
+      "tests/unit/player_test.ts:initial frame; independent clocks; idempotent binding; speed quantization; invalid numeric updates",
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures"
+    ]
+  },
+  {
+    "source": "test/crusty-playback-feature-test.cpp",
+    "assertion": "StaticRandom selects on entry and explicit restart but never on identical binding",
+    "coverage": [
+      "tests/unit/player_test.ts:idempotent binding, restart, pause; final dwell, completion chain, carry and terminal hold"
+    ]
+  },
+  {
+    "source": "test/crusty-playback-feature-test.cpp",
+    "assertion": "Once chains retain final dwell and carry elapsed time into a terminal static state",
+    "coverage": [
+      "tests/unit/player_test.ts:idempotent binding, restart, pause; final dwell, completion chain, carry and terminal hold"
+    ]
+  },
+  {
+    "source": "test/crusty-playback-feature-test.cpp",
+    "assertion": "a paused Bob consumes no time even for a maximum delta",
+    "coverage": [
+      "tests/unit/player_test.ts:idempotent binding, restart, pause; final dwell, completion chain, carry and terminal hold"
+    ]
+  },
+  {
+    "source": "test/crusty-playback-feature-test.cpp",
+    "assertion": "legacy animation enum values stay stable",
+    "exclusion": "Public string modes deliberately do not expose legacy C++ enum ordinals."
+  },
+  {
+    "source": "test/crustacean-completion-transition-test.cpp",
+    "assertion": "Blobby dying completes into dead and holds the static frame",
+    "coverage": [
+      "tests/unit/parse_test.ts:completion targets/options and reject cycle",
+      "tests/unit/player_test.ts:final dwell, completion chain, carry and terminal hold"
+    ]
+  },
+  {
+    "source": "test/crustacean-completion-transition-test.cpp",
+    "assertion": "on_complete accepts a valid Once target and rejects invalid values",
+    "coverage": [
+      "tests/unit/parse_test.ts:completion targets/options and reject cycle",
+      "tests/unit/player_test.ts:final dwell, completion chain, carry and terminal hold"
+    ]
+  },
+  {
+    "source": "test/crustacean-completion-transition-test.cpp",
+    "assertion": "completion chains cannot cycle",
+    "coverage": [
+      "tests/unit/parse_test.ts:completion targets/options and reject cycle",
+      "tests/unit/player_test.ts:final dwell, completion chain, carry and terminal hold"
+    ]
+  },
+  {
+    "source": "test/crusty-load-failure-test.cpp",
+    "assertion": "a missing JSON file returns no sprite",
+    "coverage": [
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures",
+      "tests/unit/player_test.ts:idempotent binding and recoverable selection"
+    ],
+    "deviation": "Failures throw typed CrustyError rather than returning null/falling back to game assets."
+  },
+  {
+    "source": "test/crusty-load-failure-test.cpp",
+    "assertion": "a JSON file with a missing atlas returns no sprite",
+    "coverage": [
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures",
+      "tests/unit/player_test.ts:idempotent binding and recoverable selection"
+    ],
+    "deviation": "Failures throw typed CrustyError rather than returning null/falling back to game assets."
+  },
+  {
+    "source": "test/crusty-load-failure-test.cpp",
+    "assertion": "malformed JSON returns no sprite",
+    "coverage": [
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures",
+      "tests/unit/player_test.ts:idempotent binding and recoverable selection"
+    ],
+    "deviation": "Failures throw typed CrustyError rather than returning null/falling back to game assets."
+  },
+  {
+    "source": "test/crusty-load-failure-test.cpp",
+    "assertion": "a missing animation key leaves the current fallback sprite unchanged",
+    "coverage": [
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures",
+      "tests/unit/player_test.ts:idempotent binding and recoverable selection"
+    ],
+    "deviation": "Failures throw typed CrustyError rather than returning null/falling back to game assets."
+  },
+  {
+    "source": "test/crusty-load-failure-test.cpp",
+    "assertion": "an omitted animation still selects a sprite's sole animation",
+    "coverage": [
+      "tests/unit/load_test.ts:HTTP, network, syntax and decoder failures",
+      "tests/unit/player_test.ts:idempotent binding and recoverable selection"
+    ],
+    "deviation": "Failures throw typed CrustyError rather than returning null/falling back to game assets."
+  },
+  {
+    "source": "test/crusty-structural-audit-regression-test.cpp",
+    "assertion": "the filesystem audit rejects unloadable animation definitions",
+    "coverage": [
+      "tests/unit/parse_test.ts:malformed data and atlas bounds",
+      "tests/unit/load_test.ts:atlas bounds failure releases decoded resource"
+    ],
+    "exclusion": "Game filesystem inventory traversal is outside standalone metadata validation."
+  },
+  {
+    "source": "test/crusty-test.cpp",
+    "assertion": "we only spawn one sprite per filename/scalefactor pairing ever",
+    "exclusion": "No implicit cache, mod mounts or filename/scalefactor singleton registry. Each load owns its result; callers can explicitly share assets."
+  },
+  {
+    "source": "test/crusty-cache-provenance-red-test.cpp",
+    "assertion": "a same-path JSON override does not reuse a cached shipped sprite",
+    "exclusion": "No implicit cache, mod mounts or filename/scalefactor singleton registry. Each load owns its result; callers can explicitly share assets."
+  },
+  {
+    "source": "test/crusty-cache-provenance-red-test.cpp",
+    "assertion": "an atlas-only override does not reuse a cached shipped sprite",
+    "exclusion": "No implicit cache, mod mounts or filename/scalefactor singleton registry. Each load owns its result; callers can explicitly share assets."
+  },
+  {
+    "source": "test/crusty-background-loading-regression-test.cpp",
+    "assertion": "worker loading preserves animation metadata and defers GPU frames until renderer completion",
+    "coverage": [
+      "tests/unit/load_test.ts:abort before fetch and during decode",
+      "tests/browser/canvas_test.ts:built JS loading"
+    ],
+    "exclusion": "SDL renderer queues, GPU frame upload and C++ worker-thread/scaling parity are outside the Canvas adapter."
+  },
+  {
+    "source": "test/crusty-background-loading-regression-test.cpp",
+    "assertion": "scaled worker loading matches renderer loading",
+    "coverage": [
+      "tests/unit/load_test.ts:abort before fetch and during decode",
+      "tests/browser/canvas_test.ts:built JS loading"
+    ],
+    "exclusion": "SDL renderer queues, GPU frame upload and C++ worker-thread/scaling parity are outside the Canvas adapter."
+  },
+  {
+    "source": "test/crusty-background-loading-regression-test.cpp",
+    "assertion": "loading without a renderer waits and destroying a pending sprite cancels completion",
+    "coverage": [
+      "tests/unit/load_test.ts:abort before fetch and during decode",
+      "tests/browser/canvas_test.ts:built JS loading"
+    ],
+    "exclusion": "SDL renderer queues, GPU frame upload and C++ worker-thread/scaling parity are outside the Canvas adapter."
+  }
+]

@@ -1,6 +1,8 @@
 # Crustacean Sprite Library: Implementation Design
 
-Status: design only. No library code or tests have been implemented or run.
+Status: implemented; this document retains the design contract. Current test
+evidence and remaining acceptance states are recorded in
+[docs/compatibility.md](docs/compatibility.md) and the project plan.
 Source inspection: 2026-10-13. Execution checklist and decisions:
 [CRUSTACEAN-SPRITE-LIB-PLAN.md](CRUSTACEAN-SPRITE-LIB-PLAN.md).
 
@@ -10,6 +12,13 @@ Implement Crusty v1 loading, animation playback, and browser Canvas 2D rendering
 in TypeScript. Compile that source to ordinary JavaScript ES modules with
 generated TypeScript declarations. Use Deno as the development task and test
 runner. Canvas 2D is the user's confirmed first rendering target.
+
+Decisions updated 2026-10-13: timed rerolls for Random; first-class Deno and
+Node consumption; palette replacement in v2; ship the Lord Stan test asset; MIT
+license. ESM JavaScript with generated `.d.ts` files, distributed through npm,
+is confirmed by the user. The package name is `crustacean-sprite-lib`.
+Publication is deferred until the user requests it; implementation and local
+package validation can proceed.
 
 The initial release provides:
 
@@ -21,12 +30,13 @@ The initial release provides:
   implementation.
 - An npm-compatible ESM package, `.d.ts` files, source maps, and declaration
   maps.
+- The Lord Stan JSON/PNG test asset as the shipped browser example.
 
 Deferred: CommonJS/UMD bundles, WebGL/WebGPU, engine-specific adapters, atlas
 generation, legacy `.spr`/XML conversion, Dredmor mod mounting, monster
-lifecycle, game animation gates, palette replacement, outlines, and Dredmor's
-special 2x scaling filter. Palette and facing metadata are still parsed and
-exposed.
+lifecycle, and game animation gates. Palette replacement is planned for v2;
+palette and facing metadata are still parsed and exposed in v1. Outlines and
+Dredmor's special 2x scaling filter are out of scope.
 
 ## 2. Compatibility baseline
 
@@ -52,10 +62,12 @@ Relevant production files, relative to that checkout:
 loader or playback specification. `sprite_crustacean_data.cpp` and
 `sprite_crustacean.cpp` likewise do not contain the substantive parser.
 
-Compatibility means matching supported data and observable playback, including
-documented quirks below. It does not require reproducing C++ truncation,
-undefined behavior, memory ownership, process exits, or malformed-input crashes.
-Record every intentional difference in a test-linked compatibility document.
+Compatibility means matching supported data and observable playback except for
+the user-directed Random change: this library rerolls on timed boundaries, where
+the inspected C++ implementation retains its selected instruction. It does not
+require reproducing C++ truncation, undefined behavior, memory ownership,
+process exits, or malformed-input crashes. Record every intentional difference
+in a test-linked compatibility document.
 
 Before implementation, record source-file hashes and relevant fixture hashes in
 `tests/fixtures/provenance.json`. Pin the baseline; do not silently follow a
@@ -86,6 +98,11 @@ Core imports must work without `window`, `document`, `Deno`, `process`, or any
 image/canvas implementation. Importing an adapter must not start I/O or access a
 browser global until an operation is called. Renderer adapters consume the same
 definition and player; they must never implement their own animation clock.
+
+Deno and Node support covers parsing, geometry, playback, and HTTP(S) definition
+loading. Local-file callers read text with their runtime's file API and pass it
+to `parseCrusty`. Canvas rendering targets browsers; Node consumption does not
+require installing a native canvas package.
 
 Use named exports, camelCase functions/methods, PascalCase types, and string
 unions for modes. Preserve the format's existing serialized field names. Do not
@@ -204,29 +221,40 @@ selection or replacement leaves the current player unchanged.
 independent playback state. The caller supplies elapsed milliseconds; the player
 creates no timers and never reads wall-clock time.
 
-| Mode           | Required behavior                                                                                                  |
-| -------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `Static`       | Hold the first instruction indefinitely                                                                            |
-| `Looping`      | Repeat instructions in order                                                                                       |
-| `BackAndForth` | For three instructions: `0,1,2,1,0,...`; no duplicated endpoints; one instruction is valid                         |
-| `Once`         | Consume every dwell, including the final one; finish at the last frame                                             |
-| `StaticRandom` | Select one candidate on entry/restart and hold it indefinitely                                                     |
-| `Random`       | Baseline quirk: start with the first candidate and retain it during timed advancement; elapsed steps still advance |
+| Mode           | Required behavior                                                                          |
+| -------------- | ------------------------------------------------------------------------------------------ |
+| `Static`       | Hold the first instruction indefinitely                                                    |
+| `Looping`      | Repeat instructions in order                                                               |
+| `BackAndForth` | For three instructions: `0,1,2,1,0,...`; no duplicated endpoints; one instruction is valid |
+| `Once`         | Consume every dwell, including the final one; finish at the last frame                     |
+| `StaticRandom` | Select one candidate on entry/restart and hold it indefinitely                             |
+| `Random`       | Select one candidate on entry/restart, then reroll at every elapsed dwell boundary         |
 
-`Random` currently does not sample on timer expiry. Its getter test explicitly
-sets `current_random_instruction` externally. Do not infer conventional random
-playback from the name. A future behavior change needs a separately documented
-policy and tests. `StaticRandom` uses an injected `randomIndex(count)` function,
-defaulting to a uniform index from `Math.random`; tests inject exact choices and
-assert call counts. Preserve duplicates as weighting. C++ and JS RNG sequences
-need not match for the same seed. Validate injected RNG results as integers in
-`[0, count)` before committing state.
+Both random modes use an injected `randomIndex(count)` function, defaulting to a
+uniform index from `Math.random`. Random makes one selection on entry and one
+per elapsed dwell boundary; StaticRandom only selects on entry/restart. Each
+Random reroll starts a new effective dwell using the authored common delay and
+current speed. The same frame may be selected consecutively. Preserve duplicate
+candidates as weighting, and consume a draw even for a single-candidate list. An
+exact boundary rerolls; `advance(0)` at unchanged speed does not.
+
+For example, `[100, [2, 3, 2], "Random"]` with injected choices `0, 1, 2, 1`
+starts at frame 2. Advancing 250 ms selects frame 3 at 100 ms and frame 2 at 200
+ms, leaving 50 ms until the next reroll. Advancing another 50 ms selects
+frame 3. There have been four RNG calls including entry. Partitioning those
+updates must produce the same choices and remaining dwell.
+
+Tests inject exact choices and assert call counts. C++ and JS RNG sequences need
+not match for the same seed. Validate injected RNG results as integers in
+`[0, count)` before committing state. The C++ held-instruction Random getter
+test is a documented intentional divergence, not an assertion to port unchanged.
 
 Core rules:
 
 - The initial frame is available immediately. Selecting the same definition/key
   preserves timing, selected random frame, and generation. Explicit restart
-  resets state and rerolls `StaticRandom`. A new binding increments generation.
+  resets state and rerolls both random modes. A new binding increments
+  generation.
 - Omitted animation names are accepted only when exactly one animation exists.
 - An exact boundary advances: `delta == remainingMs` enters the next
   instruction.
@@ -246,10 +274,12 @@ Core rules:
 - Return ordered completion records from `advance`; emit one per completed
   generation, including intermediate Once tracks. Avoid callbacks during state
   mutation. Rendering and frame getters must never advance time or consume RNG.
-- Preserve the full elapsed delta. Skip whole periods arithmetically for
-  looping, ping-pong, and the retained Random instruction, including cumulative
-  step count and partial dwell. Do not implement an iteration cap that drops
-  elapsed time.
+- Preserve the full elapsed delta. Skip whole periods arithmetically for looping
+  and ping-pong, including cumulative step count and partial dwell. Random must
+  consume every elapsed reroll in order, even during large updates; its cost is
+  proportional to the number of boundaries crossed. Do not skip RNG calls or use
+  an iteration cap that drops time. Applications can partition unusually large
+  updates to yield between calls without changing the result.
 - For a fixed speed and the same inputs, advancing `a+b` must equal `a` then `b`
   in frame, step, remaining dwell, completion records, and RNG consumption.
 
@@ -306,12 +336,17 @@ Proposed use (API sketch, not implemented code):
 import { SpritePlayer } from "crustacean-sprite-lib";
 import { drawSprite, loadCanvasSprite } from "crustacean-sprite-lib/canvas2d";
 
-const asset = await loadCanvasSprite(new URL("./blobby.json", import.meta.url));
-const player = new SpritePlayer(asset.definition, { animation: "walk_down" });
+// Example module lives in examples/canvas2d/.
+const asset = await loadCanvasSprite(
+  new URL("../../assets/lord-stan/lord_stan.json", import.meta.url),
+);
+const player = new SpritePlayer(asset.definition, {
+  animation: "valid_looping_1",
+});
 
 player.advance(16); // returns readonly completion records
 drawSprite(context, asset, player, { x: 100, y: 80, scaleX: 2, scaleY: 2 });
-player.select("dying"); // preserves progress if already selected
+player.select("Random_1"); // preserves progress if already selected
 player.restart();
 player.pause();
 player.resume();
@@ -335,6 +370,22 @@ declarations must not pretend arbitrary loaded keys are compile-time literals.
 
 ## 7. JavaScript output and TypeScript declarations
 
+Use a single ESM build with generated `.d.ts` declarations under the package
+name `crustacean-sprite-lib`. Publish to npm later, when requested by the user.
+Node supports ESM, and Deno can consume npm packages directly. Keep the same API
+and artifact in both runtimes; no CommonJS build or script-tag global is needed
+for the stated targets. CommonJS applications can use dynamic `import()` when
+necessary. [Node ESM](https://nodejs.org/api/esm.html),
+[Deno npm support](https://docs.deno.com/runtime/fundamentals/node/).
+
+JSR is the JavaScript Registry, a package registry that accepts TypeScript
+source, generates API documentation, and serves Deno and npm-compatible
+consumers. Its npm compatibility layer supplies transpiled JavaScript and types;
+it is a separate registry from npm. JSR is optional for this project: begin with
+npm distribution and consider publishing the same source to JSR later.
+[JSR introduction](https://jsr.io/docs/introduction),
+[JSR npm compatibility](https://jsr.io/docs/npm-compatibility).
+
 Use Deno tasks to invoke a pinned TypeScript compiler (`npm:typescript`), with
 ES2022 output, ESM, `module`/`moduleResolution: NodeNext`, strict checking,
 `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`,
@@ -353,12 +404,13 @@ source navigation.
 [Declarations](https://www.typescriptlang.org/tsconfig/declaration.html),
 [declaration maps](https://www.typescriptlang.org/tsconfig/declarationMap.html).
 
-Proposed package metadata (name/version provisional):
+Proposed package metadata (name confirmed; version provisional):
 
 ```json
 {
   "name": "crustacean-sprite-lib",
   "version": "0.1.0",
+  "license": "MIT",
   "type": "module",
   "sideEffects": false,
   "types": "./dist/mod.d.ts",
@@ -374,9 +426,17 @@ Proposed package metadata (name/version provisional):
     "./canvas2d": {
       "types": "./dist/canvas2d.d.ts",
       "import": "./dist/canvas2d.js"
-    }
+    },
+    "./assets/lord-stan/*": "./assets/lord-stan/*"
   },
-  "files": ["dist", "src", "README.md", "LICENSE"]
+  "files": [
+    "dist",
+    "src",
+    "assets/lord-stan",
+    "README.md",
+    "LICENSE",
+    "ASSET-ATTRIBUTION.md"
+  ]
 }
 ```
 
@@ -393,9 +453,24 @@ assertion, and browser-driver packages are development dependencies.
 
 Pin Deno and development dependencies in CI and commit the lockfile. Local Deno
 was `2.9.5` with embedded TypeScript `6.0.3` at inspection; record exact chosen
-versions during bootstrap rather than relying on machine globals. An optional
-later JSR publication can expose the same TypeScript source. Publishing is not
-part of this design task.
+versions during bootstrap rather than relying on machine globals. Make Deno 2
+and Node 22/24 package checks part of the initial support matrix, pinning exact
+versions in CI. Publishing is not part of this design task.
+
+### License and shipped example asset
+
+Use MIT for this library, with the full license in `LICENSE` and the SPDX value
+in package metadata. The owner has authorized shipping Lord Stan. Include
+`test/resources/atlas_sprites/parsing/lord_stan.json` and `lord_stan.png` from
+the pinned Dredmor checkout under `assets/lord-stan/`, preserving their
+filenames and the JSON's relative image reference. Include source paths,
+revision, hashes, and existing attribution in `ASSET-ATTRIBUTION.md`; retain
+upstream notices.
+
+Keep that JSON unchanged, including comments and the existing animation names.
+Use it in the browser example and package asset checks. The other Lord Stan
+notation variants can supply test vectors, but only this JSON/PNG pair is the
+shipped game asset. Synthetic atlases remain useful for precise edge-case tests.
 
 ## 8. Deno validation strategy
 
@@ -410,25 +485,26 @@ Create a case inventory mapping each relevant C++ assertion group to a new Deno
 case, or to a written exclusion. Port fixture values and expected outcomes; do
 not derive expected values with the same algorithm being tested.
 
-| C++ test source                                           | Deno coverage                                                                                       |
-| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| `test/atlas_sprite_test.cpp`                              | Every notation, mode, boundary, skipped-frame sequence, dimensions, padding, frame bounds           |
-| `test/crustacean-static-random-animation-test.cpp`        | Candidate parsing, sentinel delays, exact RNG calls, hold and reroll                                |
-| `test/crustacean-playback-invariance-regression-test.cpp` | Uneven dwells, complete periods, elapsed partitions, completed Once stability                       |
-| `test/crusty-main-contract-regression-test.cpp`           | Exact 1 ms boundaries, initial frame, idempotent binding, speed quantization, transactional failure |
-| `test/crusty-playback-feature-test.cpp`                   | Pause, explicit restart, chained completion and carry                                               |
-| `test/crustacean-completion-transition-test.cpp`          | Completion targets, missing targets, cycles, final dwell and terminal Static                        |
-| `test/crusty-load-failure-test.cpp`                       | Missing/bad JSON and image, unknown key, sole-animation default                                     |
-| `test/crusty-structural-audit-regression-test.cpp`        | Malformed definitions and atlas validity                                                            |
-| `test/crusty-test.cpp`, cache/background-loading tests    | Record exclusions or analogous ownership/cancellation cases; no claim of C++ cache/thread parity    |
+| C++ test source                                           | Deno coverage                                                                                                               |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `test/atlas_sprite_test.cpp`                              | Notations, modes, boundaries, skipped frames and geometry; new Deno cases specify timed Random as an intentional difference |
+| `test/crustacean-static-random-animation-test.cpp`        | Candidate parsing, sentinel delays, exact RNG calls, hold and reroll                                                        |
+| `test/crustacean-playback-invariance-regression-test.cpp` | Uneven dwells, complete periods, elapsed partitions, completed Once stability                                               |
+| `test/crusty-main-contract-regression-test.cpp`           | Exact 1 ms boundaries, initial frame, idempotent binding, speed quantization, transactional failure                         |
+| `test/crusty-playback-feature-test.cpp`                   | Pause, explicit restart, chained completion and carry                                                                       |
+| `test/crustacean-completion-transition-test.cpp`          | Completion targets, missing targets, cycles, final dwell and terminal Static                                                |
+| `test/crusty-load-failure-test.cpp`                       | Missing/bad JSON and image, unknown key, sole-animation default                                                             |
+| `test/crusty-structural-audit-regression-test.cpp`        | Malformed definitions and atlas validity                                                                                    |
+| `test/crusty-test.cpp`, cache/background-loading tests    | Record exclusions or analogous ownership/cancellation cases; no claim of C++ cache/thread parity                            |
 
 Port normalized metadata from
 `test/resources/atlas_sprites/parsing/lord_stan*.json`, `static_random.json`,
 and the palette fixture. The actual all-notation file is `lord_stan.json`; its
 C++ test label calls it `lord_stan_1.json`. Retain provenance and content
 hashes. Some old metadata fixtures need separate atlas-bounds expectations; do
-not force every parser fixture to be a valid rendering asset. Prefer small
-synthetic atlases for distributable pixel tests.
+not force every parser fixture to be a valid rendering asset. Ship the
+authorized Lord Stan pair described above; use synthetic atlases for isolated
+pixel tests.
 
 Store reference vectors containing input, operations, expected frame/key/step,
 remaining dwell, status, generation, and RNG calls. Mark evidence as
@@ -437,6 +513,12 @@ to compare representative operations against the pinned implementation; it must
 not modify existing tests. Capture its compiler, revision, command, and results.
 Ordinary Deno CI uses checked-in vectors and never requires a Dredmor checkout
 or rebuild. Do not label manually derived vectors as executed C++ parity.
+
+Add new Random vectors for entry, exact-boundary rerolls, multiple boundaries in
+one update, repeated choices, weighted duplicates, singleton candidates, pause,
+restart, same-key selection, speed changes, and elapsed partitions. Record these
+as library requirements rather than C++ parity. A large-delta test must count
+every expected reroll and verify the residual dwell.
 
 New JS-specific tests cover malformed `unknown` values, comments in strings,
 unsafe integers, all row shapes, fractional-time accumulation, speed changes,
@@ -464,11 +546,14 @@ deterministically generated small cases.
 4. Check an actual staged package from an isolated consumer: plain JS ESM
    import, strict TS imports through package subpaths, negative type assertions,
    and relative browser imports from built JS. Test NodeNext and bundler type
-   resolution. Run a Node JS import smoke check from a Deno test if Node support
-   is advertised; the semantic suite still runs in Deno.
+   resolution. A required Deno test launches Node against the staged package to
+   verify import, parsing, and playback of representative vectors. Exercise the
+   same packaged entry points in Deno; the semantic test suite runs in Deno.
 5. Check declarations with `skipLibCheck: false` and a core consumer without DOM
    types. Validate all package entries, emitted imports, and source-map targets;
-   ensure tests and Dredmor assets do not enter the published file set.
+   ensure test code and unrelated Dredmor assets do not enter the published file
+   set. Assert that the Lord Stan JSON/PNG pair, MIT license, and attribution
+   are included and that the JSON's image reference resolves inside the package.
 
 Browser automation is a required rendering gate; recording-context tests alone
 cannot prove Canvas output. The initial browser gate is pinned Chromium on CI,
@@ -480,7 +565,7 @@ Proposed tasks, to be implemented rather than run against this empty repository:
 | ------------------------- | ----------------------------------------------------------------------------------------- |
 | `deno task check`         | Formatting, lint, core/browser type checks, test type checks                              |
 | `deno task test`          | Pure/parser/player and mocked-loader Deno tests; no runtime I/O permissions               |
-| `deno task test:fixtures` | Checked-in fixture/reference tests; read only `tests/fixtures`                            |
+| `deno task test:fixtures` | Checked-in fixture/reference tests; read only `tests/fixtures` and `assets/lord-stan`     |
 | `deno task build`         | Emit JS/declarations/maps and stage package in a new build directory                      |
 | `deno task test:browser`  | Deno browser tests against built JS; explicit browser/process/cache/localhost permissions |
 | `deno task test:package`  | Isolated JS and TS package consumer checks                                                |
@@ -504,6 +589,8 @@ CRUSTACEAN-SPRITE-LIB-PLAN.md
 deno.json
 deno.lock
 package.json
+LICENSE
+ASSET-ATTRIBUTION.md
 tsconfig.build.json
 tsconfig.core.json
 src/
@@ -516,6 +603,9 @@ src/
   player.ts
   load.ts
   canvas2d.ts
+assets/lord-stan/
+  lord_stan.json
+  lord_stan.png
 tests/
   unit/
   fixtures/          # synthetic assets, vectors, provenance
@@ -541,6 +631,8 @@ old artifacts without approval. Preserve existing unrelated repository files.
 - All six modes, accepted notations, completion chains, and timing invariants
   pass.
 - JSON plus PNG loads and renders correctly in the Canvas example from built JS.
+- The shipped Lord Stan example, MIT license, and asset attribution are present
+  in the staged package.
 - Shared definitions do not share playback state; failures are recoverable and
   resources are released according to ownership.
 - Built JS works without TypeScript tooling; TS consumers receive correct public
@@ -553,7 +645,9 @@ old artifacts without approval. Preserve existing unrelated repository files.
 
 # HUMAN QUESTIONS
 
-Canvas 2D is decided. Remaining questions and working defaults are recorded in
-[the project plan](CRUSTACEAN-SPRITE-LIB-PLAN.md#human-questions): Random
-semantics, package targets/name, palette effects, asset distribution, and
-license.
+Canvas 2D, timed Random rerolls, v2 palette replacement, Lord Stan distribution,
+and MIT licensing are decided. ESM through npm is the confirmed packaging
+approach for Deno and Node, with package name `crustacean-sprite-lib`.
+Publication is deferred; no implementation questions remain open. Release-time
+checks and optional JSR publication are recorded in
+[the project plan](CRUSTACEAN-SPRITE-LIB-PLAN.md#human-questions).

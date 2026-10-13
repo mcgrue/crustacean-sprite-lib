@@ -1,0 +1,50 @@
+{ // This is a munged version of stan to show a valid v1.  The animations are specifically all over the place.
+  "version": 1,
+
+  "animations": {
+    "valid_static_1": [ "0", "Static"], //both a string of a single number and..
+    "valid_static_2": [ [7], "Static"],  // an array of a single real number are valid for this format
+    "valid_static_3": [ 14, "Static"],
+    "valid_static_4": [ ["21"], "Static"],
+
+    "valid_looping_1": [ "T70 2 3 2 4 5 6 5 4", "Looping" ], // a string defining the delay in MS per frame (70), and then the sequence of frames to play
+    "valid_looping_1a": [ "T 70 2 3 2 4 5 6 5 4", "Looping" ], // same as 1 but with spaces after the Ts
+    "valid_looping_2": [ "T70 2 3 2 T150 4 5 6 5 4", "Looping" ], // a string defining the delay in MS per frame (70), and then the sequence of frames to play at that delay (frames 2, 3, then 2 again), then changing the delay to 150 ms, then playing frames (4,5,6,5,4) at *that* delay. Then repeats.
+    "valid_looping_2a": [ "T 70 2 3 2 T 150 4 5 6 5 4", "Looping" ], // same as 2 but with spaces after the Ts
+    "valid_looping_3": [ [["T",70], ["F", 2], ["F",3], ["F",2], ["F",4], ["F",5], ["F",6], ["F",5], ["F",4]], "Looping" ], // same as valid_looping_1, but VERY EXPLICIT
+    "valid_looping_4": [ [["T",70], ["F", 2], ["F",3], ["F",2], ["T",150], ["F",4], ["F",5], ["F",6], ["F",5], ["F",4]], "Looping" ], // same as valid_looping_2, but VERY EXPLICIT
+    "valid_looping_5": [ [[2,70], [3, 50], [2,70], [4,150], [5,50], [6,150], [5,50], [4,150]], "Looping" ], // All ints?! [frame, delay]
+
+    "Random_1": [ 100, [16,17,16,18,19,20,19,18], "Random" ], // Random has only one valid format [ms, array of numeric frame references, "Random" ].  The array need not be unique if you want to weight certain frames.
+
+    "valid_back_and_forth_1": [ "T75 12 13 12 14 15 16 15 14", "BackAndForth" ], // a string defining the delay in MS per frame (70), and then the sequence of frames to play
+    "valid_back_and_forth_1a": [ "T 75 12 13 12 14 15 16 15 14", "BackAndForth" ], // Same as 1 but with spaces after the T's.  UGLY.
+    "valid_back_and_forth_2": [ "T75 12 13 12 T175 14 15 16 15 14", "BackAndForth" ], // a string defining the delay in MS per frame (70), and then the sequence of frames to play at that delay (frames 12, 13, then 12 again), then changing the delay to 150 ms, then playing frames (14,15,16,15,14) at *that* delay... and then REVERSES that sequence (with the rate changing back to 75 when the "pong" hits the T175 token on the way back)
+    "valid_back_and_forth_2a": [ "T 75 12 13 12 T 175 14 15 16 15 14", "BackAndForth" ], // Same as 2 but with spaces after the T's.  UGLY.
+    "valid_back_and_forth_3": [ [["T",75], ["F", 12], ["F",13], ["F",12], ["F",14], ["F",15], ["F",16], ["F",15], ["F",14]], "BackAndForth" ], // same as valid_looping_1, but VERY EXPLICIT
+    "valid_back_and_forth_4": [ [["T",75], ["F", 12], ["F",13], ["F",12], ["T",175], ["F",14], ["F",15], ["F",16], ["F",15], ["F",14]], "BackAndForth" ], // same as valid_looping_2, but VERY EXPLICIT
+
+    "valid_once_1": [ "T50 22 23 22 24 25 26 25 24", "Once" ], // a string defining the delay in MS per frame (70), and then the sequence of frames to play
+    "valid_once_2": [ "T50 22 23 22 T250 24 25 26 25 24", "Once" ], // a string defining the delay in MS per frame (70), and then the sequence of frames to play at that delay (frames 22, 23, then 22 again), then changing the delay to 150 ms, then playing frames (24,25,26,25,24) at *that* delay.  Then stops.
+    "valid_once_3": [ [["T",50], ["F", 22], ["F",23], ["F",22], ["F",24], ["F",25], ["F",26], ["F",25], ["F",24]], "Once" ], // same as valid_once_1, but VERY EXPLICIT
+    "valid_once_4": [ [["T",50], ["F", 22], ["F",23], ["F",22], ["T",250], ["F",24], ["F",25], ["F",26], ["F",25], ["F",24]], "Once" ] // same as valid_once_2, but VERY EXPLICIT
+  },
+
+  "dims": [
+    48,
+    48
+  ],
+
+  "hitbox": [
+    0,  // offset x
+    0, // offset y
+    48, // width
+    48  // height
+  ],
+
+  "frames": 28,
+  "image": "lord_stan.png", // relative to this file
+  "inner_pad": 0, // in px
+  "outer_pad": 0,
+  "per_row": 7
+}
