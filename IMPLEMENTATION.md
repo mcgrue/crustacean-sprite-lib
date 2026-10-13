@@ -3,6 +3,9 @@
 Status: implemented; this document retains the design contract. Current test
 evidence and remaining acceptance states are recorded in
 [docs/compatibility.md](docs/compatibility.md) and the project plan.
+The follow-up WebGL 2 adapter is implemented as described in
+[WEBGL-RENDERER-PLAN.md](WEBGL-RENDERER-PLAN.md); the initial Canvas contracts
+below remain applicable.
 Source inspection: 2026-10-13. Execution checklist and decisions:
 [CRUSTACEAN-SPRITE-LIB-PLAN.md](CRUSTACEAN-SPRITE-LIB-PLAN.md).
 
@@ -32,7 +35,7 @@ The initial release provides:
   maps.
 - The Lord Stan JSON/PNG test asset as the shipped browser example.
 
-Deferred: CommonJS/UMD bundles, WebGL/WebGPU, engine-specific adapters, atlas
+Deferred: CommonJS/UMD bundles, WebGPU, engine-specific adapters, atlas
 generation, legacy `.spr`/XML conversion, Dredmor mod mounting, monster
 lifecycle, and game animation gates. Palette replacement is planned for v2;
 palette and facing metadata are still parsed and exposed in v1. Outlines and

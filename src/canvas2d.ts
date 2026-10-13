@@ -3,11 +3,12 @@ import { CrustyError } from "./errors.ts";
 import { checkAbort, fetchResource, loadSpriteDefinition } from "./load.ts";
 import type { LoadedDefinition, LoadOptions } from "./load.ts";
 import type { SpritePlayer } from "./player.ts";
+import { decodeBrowserImage } from "./browser-image.ts";
+import type { DecodedImage } from "./browser-image.ts";
+import type { DrawOptions } from "./types.ts";
+export type { DrawOptions } from "./types.ts";
 
-export interface DecodedAtlas {
-  readonly image: CanvasImageSource;
-  readonly width: number;
-  readonly height: number;
+export interface DecodedAtlas extends DecodedImage {
   /** Close only resources created/owned by this decoder. */
   readonly close?: () => void;
 }
@@ -25,44 +26,7 @@ export async function decodeCanvasImage(
   blob: Blob,
   signal?: AbortSignal,
 ): Promise<DecodedAtlas> {
-  checkAbort(signal);
-  if (typeof globalThis.createImageBitmap === "function") {
-    const bitmap = await createImageBitmap(blob);
-    try {
-      checkAbort(signal);
-    } catch (cause) {
-      bitmap.close();
-      throw cause;
-    }
-    return Object.freeze({
-      image: bitmap,
-      width: bitmap.width,
-      height: bitmap.height,
-      close: () => bitmap.close(),
-    });
-  }
-  const image = new Image();
-  const objectUrl = URL.createObjectURL(blob);
-  const abort = () => {
-    image.src = "";
-  };
-  try {
-    signal?.addEventListener("abort", abort, { once: true });
-    image.src = objectUrl;
-    await image.decode();
-    checkAbort(signal);
-    return Object.freeze({
-      image,
-      width: image.naturalWidth,
-      height: image.naturalHeight,
-    });
-  } catch (cause) {
-    checkAbort(signal);
-    throw cause;
-  } finally {
-    signal?.removeEventListener("abort", abort);
-    URL.revokeObjectURL(objectUrl);
-  }
+  return await decodeBrowserImage(blob, signal);
 }
 
 export async function loadCanvasSprite(
@@ -126,18 +90,6 @@ export async function loadCanvasSprite(
   });
 }
 
-export interface DrawOptions {
-  x?: number;
-  y?: number;
-  scaleX?: number;
-  scaleY?: number;
-  flipX?: boolean;
-  flipY?: boolean;
-  rotation?: number;
-  opacity?: number;
-  originX?: number;
-  originY?: number;
-}
 export function drawSprite(
   context: CanvasRenderingContext2D,
   asset: CanvasSprite,

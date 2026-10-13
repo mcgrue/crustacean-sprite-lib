@@ -6,6 +6,8 @@ export type CrustyErrorCode =
   | "fetch"
   | "image-decode"
   | "atlas-bounds"
+  | "context-lost"
+  | "gpu"
   | "disposed";
 
 export class CrustyError extends Error {

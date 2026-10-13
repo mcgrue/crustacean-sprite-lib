@@ -59,6 +59,70 @@ support parsing, geometry, playback and HTTP definition loading. Canvas requires
 a browser. Errors are `CrustyError` with stable codes, optional field paths and
 source URLs, plus causes; cancellation retains abort errors.
 
+## WebGL 2
+
+```ts
+import { SpritePlayer } from "crustacean-sprite-lib";
+import { WebGLSpriteRenderer } from "crustacean-sprite-lib/webgl";
+
+const gl = canvas.getContext("webgl2");
+if (!gl) throw new Error("WebGL 2 unavailable");
+const renderer = new WebGLSpriteRenderer(gl);
+const asset = await renderer.loadSprite("https://example.test/sprite.json");
+const player = new SpritePlayer(asset.definition, { animation: "walk" });
+player.advance(16);
+renderer.beginFrame({
+  width: canvas.width,
+  height: canvas.height,
+  clearColor: [0, 0, 0, 0],
+});
+try {
+  renderer.draw(asset, player, { x: 100, y: 80, scaleX: 2, scaleY: 2 });
+} finally {
+  renderer.endFrame();
+}
+asset.dispose();
+renderer.dispose();
+```
+
+`DrawOptions` is shared with Canvas and exported from core and both adapters.
+WebGL snapshots the frame and transform when queued. `endFrame()` batches
+adjacent draws on one atlas while preserving painter order. Each asset uploads
+once; frame updates never decode images or replace textures. Logical frame
+width/height are independent of drawing-buffer resolution, with top-left
+coordinates. Applications own canvas resizing/DPR. Omit `clearColor` to retain
+canvas contents. A frame targets the canvas framebuffer and restores the GL
+state it changes; uploads restore texture/pixel-unpack bindings and flags. Use
+an error-free context with inactive transform feedback, and keep other GL
+operations outside an active frame.
+
+The fragment shader produces premultiplied alpha. Transparent contexts require
+`premultipliedAlpha: true` (the browser default); opaque contexts are accepted.
+Default decoding explicitly requests straight-alpha, unflipped ImageBitmap
+pixels, with an HTMLImage fallback. An injected decoder returns
+`WebGLDecodedImage` and must provide accurate dimensions and a stable,
+straight-alpha, unflipped `TexImageSource` until its optional `close()` is
+called.
+
+Assets belong to one renderer. Disposing a queued asset is rejected until the
+frame finishes. Renderer disposal discards any frame, invalidates all its assets
+and releases resources, while leaving the caller's context alive. `dispose()` is
+idempotent. `gpu` and `context-lost` extend the existing typed error codes.
+
+After a `webglcontextlost` event, prevent its default to allow browser recovery.
+Stop drawing while `renderer.contextLost` is true; call `renderer.restore()`
+after `webglcontextrestored`. Retained decoded images rebuild GPU resources
+without fetching again, keeping asset/player handles usable. Failed restoration
+can be retried. Pending loads from an earlier context generation fail and
+release their resources. The WebGL example handles these events and preserves
+playback.
+
+Open `http://127.0.0.1:8000/examples/webgl/index.html` after
+`deno task example`. The Canvas example also links to it. New browser tests use
+software WebGL 2 in Chromium and verify pixels, ordered batches, state
+restoration, decode paths, context recovery and cleanup. No performance speedup
+is claimed without a benchmark.
+
 ## Development and example
 
 Pinned tools: Deno 2.9.5, TypeScript 5.9.3, Playwright 1.56.1; Node 22.20.0 or

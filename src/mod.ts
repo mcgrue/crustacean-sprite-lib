@@ -6,6 +6,7 @@ export type {
   AnimationRow,
   AuthoringOptions,
   CrustyV1,
+  DrawOptions,
   Facing,
   Instruction,
   Rect,

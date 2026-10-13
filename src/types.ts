@@ -23,6 +23,18 @@ export interface Rect {
   readonly width: number;
   readonly height: number;
 }
+export interface DrawOptions {
+  x?: number;
+  y?: number;
+  scaleX?: number;
+  scaleY?: number;
+  flipX?: boolean;
+  flipY?: boolean;
+  rotation?: number;
+  opacity?: number;
+  originX?: number;
+  originY?: number;
+}
 export interface SpriteDefinition {
   readonly version: 1;
   readonly image: string;

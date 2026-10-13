@@ -86,3 +86,19 @@ relative module URLs resolve correctly. A new browser regression uses the actual
 server handler at `/` and verifies all 22 animations load. Both Windows browser
 tests and the static checks pass; the earlier 78-test result predates this added
 regression. The subsequent Windows `deno task test:all` run passed all 79 tests.
+
+## WebGL 2 follow-up
+
+The `webgl` adapter shares definitions, players, draw options and browser image
+decoding with Canvas. New tests cover exact RGBA output, fractional transforms,
+ordered batching, queued-frame snapshots, shared-context state restoration,
+ImageBitmap/HTMLImage alpha and orientation, resource failures/disposal, late
+decodes and explicit context restoration without I/O. Existing tests are
+unchanged.
+
+`deno task test:all` passes 86 tests on Windows and Ubuntu 24.04 under WSL: 69
+unit, 7 conformance, 8 browser and 2 package tests. Node 22/24 consumers receive
+the new subpath and generated types. GL tests use pinned Chromium with software
+rendering; they do not establish GPU performance or other-browser support. See
+[the WebGL plan](../WEBGL-RENDERER-PLAN.md) for API contracts and implementation
+evidence.
