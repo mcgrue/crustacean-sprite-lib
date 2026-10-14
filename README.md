@@ -5,6 +5,25 @@ Canvas 2D rendering. Native TypeScript produces dependency-free ESM JavaScript
 with generated declarations and source maps. Package name:
 `crustacean-sprite-lib`; version `0.1.0`. Publication is deferred.
 
+## Install from GitHub
+
+Using Node 22+, install directly from the private repository with an SSH key
+that has access:
+
+```sh
+npm install "git+ssh://git@github.com/mcgrue/crustacean-sprite-lib.git#main"
+```
+
+Use `#<commit>` or `#<release-tag>` for a fixed version. The consumer lockfile
+records the resolved Git commit. Generated ESM JavaScript, declarations and
+source maps are tracked in `dist/`, so installation does not run a build and
+consumers do not need Deno or a compiler. There are no install lifecycle hooks
+or package dependencies. Registry publication remains deferred.
+
+Browser applications serve their sprite JSON/PNG through their own public asset
+directory. The package's Lord Stan pair is under
+`node_modules/crustacean-sprite-lib/assets/lord-stan/` if you want that example.
+
 ## Use
 
 ```ts
@@ -141,12 +160,22 @@ restart. The example imports built JavaScript and retains fractional animation
 time between animation frames. Hidden tabs reset the example's elapsed clock.
 
 Individual tasks: `check`, `test`, `test:fixtures`, `build`, `test:browser`,
-`test:package`. The default unit suite needs no I/O permissions. Browser tests
-use pinned Chromium over localhost; fixture tests read only checked-in fixtures.
-Package tests create and unpack a real npm tarball, run isolated Node/Deno JS
-consumers and strict NodeNext/Bundler TS consumers with `skipLibCheck: false`.
-They validate exports, declarations, all map targets and the asset/license file
-set. CI runs these gates on Windows/Linux and both pinned Node versions.
+`test:package`, `test:git`, `check:dist`. The default unit suite needs no I/O
+permissions. Browser tests use pinned Chromium over localhost; fixture tests
+read only checked-in fixtures. Package tests create and unpack a real npm
+tarball, run isolated Node/Deno JS consumers and strict NodeNext/Bundler TS
+consumers with `skipLibCheck: false`. They validate exports, declarations, all
+map targets and the asset/license file set. CI runs these gates on Windows/Linux
+and both pinned Node versions.
+
+`check:dist` builds a fresh stage without changing the working `dist/`, then
+compares all bytes and filenames against `HEAD` and the working tree. CI fails
+on changed, missing, uncommitted or obsolete output. After source edits, run
+`deno task build` and commit `src/` with its generated `dist/`. For pre-commit
+validation, stage the intended changes and run `deno task check:dist --staged`.
+New Git-install tests snapshot that staged tree locally; on CI they use the
+clean committed tree. `test:git` uses a local Git URL, normal npm installation
+behavior and an isolated consumer, then checks every exported entry/type path.
 
 Build creates a fresh package under `.build/package-<id>/` and mirrors its
 generated output into `dist/` for the example. `.build/latest.txt` identifies

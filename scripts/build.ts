@@ -1,4 +1,5 @@
 /** Fresh staging directories preserve all prior artifacts; no cleanup/deletion. */
+import { fileURLToPath } from "node:url";
 const root = new URL("../", import.meta.url);
 const stage = new URL(`.build/package-${crypto.randomUUID()}/`, root);
 async function copyTree(from: URL, to: URL): Promise<void> {
@@ -56,9 +57,11 @@ for await (const entry of Deno.readDir(new URL("dist/", stage))) {
     text.replace(/(from\s+["']\.\.?\/[^"']+)\.ts(["'])/g, "$1.js$2"),
   );
 }
-await copyTree(new URL("dist/", stage), new URL("dist/", root));
+if (!Deno.args.includes("--no-mirror")) {
+  await copyTree(new URL("dist/", stage), new URL("dist/", root));
+}
 await Deno.writeTextFile(
   new URL(".build/latest.txt", root),
-  stage.pathname.replace(/^\/(\w:)/, "$1"),
+  fileURLToPath(stage),
 );
 console.log(`Built ${stage.href}`);

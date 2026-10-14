@@ -1,6 +1,7 @@
 # Direct GitHub installation plan
 
-Status: recommendation only. Generated `dist/` remains ignored and untracked.
+Status: implemented. Generated `dist/` is included in the distribution change;
+freshness, Git installation and platform validation are recorded below.
 
 ## Decision
 
@@ -45,6 +46,18 @@ source/compiler changes. CI makes that upkeep explicit and catches stale output.
 
 Git installation and prepare-script behavior:
 [npm install documentation](https://docs.npmjs.com/cli/v11/commands/npm-install/).
+
+## Verification
+
+- Windows and Linux: all 89 unit, conformance, browser, package and Git-install
+  tests pass with Node 22.20.0 and Deno 2.9.5.
+- Normal Git installation also passes with Node 24.10.0 on both platforms;
+  consumers import all four entry points and pass strict NodeNext/Bundler type
+  checks without an installation build hook.
+- All 44 generated artifacts match byte-for-byte across platforms. The freshness
+  gate passes against the Windows Git index and a clean Linux HEAD.
+- Existing tests and byte-exact source fixtures remain unchanged. Registry
+  publication and release tags remain deferred.
 
 # HUMAN QUESTIONS
 

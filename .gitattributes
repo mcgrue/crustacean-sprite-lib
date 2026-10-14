@@ -3,6 +3,7 @@
 *.js text eol=lf
 *.html text eol=lf
 *.json text eol=lf
+*.map text eol=lf
 *.md text eol=lf
 *.yml text eol=lf
 assets/lord-stan/* -text

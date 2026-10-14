@@ -20,6 +20,8 @@ jobs:
           node-version: ${{ matrix.node }}
       - name: Cache pinned dependencies
         run: deno install --frozen
+      - name: Verify committed distribution matches a fresh build
+        run: deno task check:dist
       - name: Provision Chromium
         run: deno task setup:browser --with-deps
       - name: Validate types, unit/fixture tests, Chromium and packed consumers

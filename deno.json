@@ -27,14 +27,16 @@
     "exclude": [".build", "dist", ".claude", ".gemini", ".mcp-debug-tools"]
   },
   "tasks": {
-    "check": "deno fmt --check src scripts tests examples docs .github README.md ASSET-ATTRIBUTION.md deno.json package.json tsconfig.build.json tsconfig.core.json && deno lint src scripts tests && deno run --allow-read --allow-env npm:typescript@5.9.3/tsc --project tsconfig.core.json && deno run --allow-read --allow-env npm:typescript@5.9.3/tsc --project tsconfig.build.json --noEmit && deno check tests/unit/*.ts tests/conformance/*.ts tests/browser/*.ts tests/package/*.ts scripts/*.ts",
+    "check": "deno fmt --check src scripts tests examples docs .github README.md ASSET-ATTRIBUTION.md deno.json package.json tsconfig.build.json tsconfig.core.json && deno lint src scripts tests && deno run --allow-read --allow-env npm:typescript@5.9.3/tsc --project tsconfig.core.json && deno run --allow-read --allow-env npm:typescript@5.9.3/tsc --project tsconfig.build.json --noEmit && deno check tests/unit/*.ts tests/conformance/*.ts tests/browser/*.ts tests/package/*.ts tests/git/*.ts scripts/*.ts",
     "test": "deno test tests/unit",
     "test:fixtures": "deno test --allow-read=tests/fixtures,assets/lord-stan tests/conformance",
     "build": "deno run --allow-read --allow-write --allow-run --allow-env scripts/build.ts",
+    "check:dist": "deno run --allow-read --allow-write --allow-run --allow-env scripts/check_dist.ts",
     "setup:browser": "deno run --allow-read --allow-run=node --allow-env scripts/setup_browser.ts",
     "test:browser": "deno task build && deno test --allow-read --allow-write --allow-env --allow-sys --allow-run --allow-net=127.0.0.1 tests/browser",
     "test:package": "deno task build && deno test --allow-read --allow-write=.build --allow-run --allow-env tests/package",
-    "test:all": "deno task check && deno task test && deno task test:fixtures && deno task test:browser && deno task test:package",
+    "test:git": "deno test --allow-read --allow-write=.build --allow-run --allow-env tests/git",
+    "test:all": "deno task check && deno task test && deno task test:fixtures && deno task test:browser && deno task test:package && deno task test:git",
     "example": "deno task build && deno run --allow-read=dist,examples,assets --allow-net=127.0.0.1:8000 scripts/serve.ts"
   }
 }
