@@ -14,6 +14,21 @@ export function frameRect(definition, frame) {
         height: definition.height,
     });
 }
+/** Return a point in unscaled cell pixels for the given atlas frame. */
+export function resolveVisualAnchor(definition, frame, name) {
+    safeInteger(frame, "frame");
+    if (frame >= definition.frames) {
+        throw new CrustyError("validation", "Frame outside definition", "frame");
+    }
+    const anchors = definition.visualAnchors;
+    const overrides = anchors?.frames?.[frame];
+    if (overrides && Object.hasOwn(overrides, name))
+        return overrides[name];
+    if (anchors?.defaults && Object.hasOwn(anchors.defaults, name)) {
+        return anchors.defaults[name];
+    }
+    return undefined;
+}
 export function validateAtlas(definition, width, height) {
     safeInteger(width, "atlas.width", 1);
     safeInteger(height, "atlas.height", 1);

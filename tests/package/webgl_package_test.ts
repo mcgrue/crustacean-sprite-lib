@@ -52,7 +52,7 @@ Deno.test("packed WebGL subpath imports without browser globals and preserves sh
     join(consumer, "package.json"),
     JSON.stringify({
       type: "module",
-      dependencies: { "crustacean-sprite-lib": "0.1.0" },
+      dependencies: { "crustacean-sprite-lib": manifest.version },
     }),
   );
   await Deno.writeTextFile(

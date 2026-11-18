@@ -1,5 +1,9 @@
 # Compatibility and evidence
 
+Library 0.2.0 reads Crusty formats 1 and 2. The
+[format changelog](../CHANGELOG.md) describes the visual anchor fields and
+migration from v1.
+
 Baseline: Dredmor `371bbfd5674f245437d215ebbc0ad639daf69a58`. The library is
 independent of that checkout during builds and tests.
 
