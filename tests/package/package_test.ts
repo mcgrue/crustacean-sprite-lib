@@ -57,12 +57,13 @@ Deno.test("actual npm tarball, isolated Node/Deno ESM, strict types, exports and
       "assets/lord-stan/lord_stan.json",
       "assets/lord-stan/lord_stan.png",
       "LICENSE",
+      "CHANGELOG.md",
       "ASSET-ATTRIBUTION.md",
     ]
   ) assert(paths.has(required), required);
   for (const path of paths) {
     assert(
-      /^(dist\/|src\/|assets\/lord-stan\/|README\.md$|LICENSE$|ASSET-ATTRIBUTION\.md$|package\.json$)/
+      /^(dist\/|src\/|assets\/lord-stan\/|README\.md$|CHANGELOG\.md$|LICENSE$|ASSET-ATTRIBUTION\.md$|package\.json$)/
         .test(path),
       `unwanted package file ${path}`,
     );
@@ -86,17 +87,18 @@ Deno.test("actual npm tarball, isolated Node/Deno ESM, strict types, exports and
     join(consumer, "package.json"),
     JSON.stringify({
       type: "module",
-      dependencies: { "crustacean-sprite-lib": "0.1.0" },
+      dependencies: { "crustacean-sprite-lib": manifest.version },
     }),
   );
   const source =
-    `import { parseCrusty, SpritePlayer } from "crustacean-sprite-lib";
+    `import { parseCrusty, resolveVisualAnchor, SpritePlayer } from "crustacean-sprite-lib";
 import { loadSpriteDefinition } from "crustacean-sprite-lib/load";
 import { loadCanvasSprite } from "crustacean-sprite-lib/canvas2d";
-const data = {version:1,image:"atlas.png",dims:[2,2],hitbox:[0,0,2,2],frames:3,per_row:3,inner_pad:0,outer_pad:0,animations:{a:[[[0,5],[1,7],[2,11]],"Looping"]}};
+const data = {version:2,image:"atlas.png",dims:[2,2],hitbox:[0,0,2,2],frames:3,per_row:3,inner_pad:0,outer_pad:0,animations:{a:[[[0,5],[1,7],[2,11]],"Looping"]},visual_anchors:{defaults:{body:[0,0]},frames:{1:{body:[1,1]}}}};
 const player = new SpritePlayer(parseCrusty(JSON.stringify(data)));
 player.advance(10); player.advance(23);
 if (player.frame !== 1 || player.snapshot().step !== 4 || player.snapshot().remainingMs !== 2) throw new Error("Playback consumer failed");
+if (resolveVisualAnchor(player.definition, player.frame, "body")?.join(",") !== "1,1") throw new Error("Packaged v2 anchors failed");
 if (typeof loadSpriteDefinition !== "function" || typeof loadCanvasSprite !== "function") throw new Error("Subpaths failed");
 console.log("consumer ok");`;
   await Deno.writeTextFile(join(consumer, "consumer.js"), source);

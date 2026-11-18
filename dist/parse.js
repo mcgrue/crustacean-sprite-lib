@@ -46,7 +46,7 @@ function alias(o, a, b, path) {
     }
     return Object.hasOwn(o, a) ? o[a] : o[b];
 }
-function geometry(value, path, hitbox = false) {
+function geometry(value, path, hitbox = false, allowUnset = false) {
     const len = hitbox ? 4 : 2;
     let values;
     if (Array.isArray(value)) {
@@ -63,6 +63,8 @@ function geometry(value, path, hitbox = false) {
         if (hitbox)
             values.unshift(o.x, o.y);
     }
+    if (allowUnset && values.every((v) => v === 0))
+        return [0, 0, 0, 0];
     return values.map((v, i) => int(v, `${path}[${i}]`, hitbox && i < 2 ? 0 : 1));
 }
 function animation(name, value, frames) {
@@ -207,15 +209,66 @@ function animation(name, value, frames) {
         ...(onComplete === undefined ? {} : { onComplete }),
     });
 }
+function visualAnchors(value, width, height, frames) {
+    const path = "$.visual_anchors";
+    const root = object(value, path);
+    for (const key of Object.keys(root)) {
+        if (key !== "defaults" && key !== "frames") {
+            fail(`${path}.${key}`, "unknown field");
+        }
+    }
+    function points(value, path) {
+        const result = Object.create(null);
+        for (const [name, point] of Object.entries(object(value, path))) {
+            string(name, `${path}.key`);
+            const field = `${path}[${JSON.stringify(name)}]`;
+            if (!Array.isArray(point) || point.length !== 2) {
+                fail(field, "expected [x, y]");
+            }
+            result[name] = Object.freeze([
+                int(point[0], `${field}[0]`, 0, width - 1),
+                int(point[1], `${field}[1]`, 0, height - 1),
+            ]);
+        }
+        return Object.freeze(result);
+    }
+    const overrides = Object.create(null);
+    if (Object.hasOwn(root, "frames")) {
+        for (const [key, value] of Object.entries(object(root.frames, `${path}.frames`))) {
+            const field = `${path}.frames[${JSON.stringify(key)}]`;
+            if (!/^(0|[1-9][0-9]*)$/.test(key)) {
+                fail(field, "expected a decimal atlas frame index");
+            }
+            int(Number(key), field, 0, frames - 1);
+            overrides[key] = points(value, field);
+        }
+    }
+    return Object.freeze({
+        ...(Object.hasOwn(root, "defaults")
+            ? { defaults: points(root.defaults, `${path}.defaults`) }
+            : {}),
+        ...(Object.hasOwn(root, "frames")
+            ? { frames: Object.freeze(overrides) }
+            : {}),
+    });
+}
 /** Validate unknown data and copy it into a deeply frozen definition. */
 export function validateCrusty(value) {
     const o = folded(object(value, "$"), "$");
-    if (o.version !== 1)
-        fail("$.version", "unsupported or missing version");
+    const version = o.version;
+    if (version !== 1 && version !== 2) {
+        fail("$.version", "expected format version 1 or 2");
+    }
     const image = string(o.image, "$.image");
     const [width, height] = geometry(o.dims, "$.dims");
-    const [x, y, w, h] = geometry(o.hitbox, "$.hitbox", true);
+    const [x, y, w, h] = geometry(o.hitbox, "$.hitbox", true, version === 2);
     const frames = int(o.frames, "$.frames", 1);
+    let anchors;
+    if (Object.hasOwn(o, "visual_anchors")) {
+        if (version !== 2)
+            fail("$.visual_anchors", "requires format version 2");
+        anchors = visualAnchors(o.visual_anchors, width, height, frames);
+    }
     const perRow = int(o.per_row, "$.per_row", 1);
     const innerPad = int(o.inner_pad, "$.inner_pad");
     const outerPad = int(o.outer_pad, "$.outer_pad");
@@ -256,7 +309,7 @@ export function validateCrusty(value) {
         }));
     }
     return Object.freeze({
-        version: 1,
+        version,
         image,
         width,
         height,
@@ -266,6 +319,7 @@ export function validateCrusty(value) {
         innerPad,
         outerPad,
         animations: Object.freeze(animations),
+        ...(anchors === undefined ? {} : { visualAnchors: anchors }),
         ...(palette === undefined ? {} : { palette }),
     });
 }

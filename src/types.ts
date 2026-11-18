@@ -35,8 +35,15 @@ export interface DrawOptions {
   originX?: number;
   originY?: number;
 }
+export type VisualAnchor = readonly [x: number, y: number];
+export interface VisualAnchors {
+  readonly defaults?: Readonly<Record<string, VisualAnchor>>;
+  readonly frames?: Readonly<
+    Record<string, Readonly<Record<string, VisualAnchor>>>
+  >;
+}
 export interface SpriteDefinition {
-  readonly version: 1;
+  readonly version: 1 | 2;
   readonly image: string;
   readonly width: number;
   readonly height: number;
@@ -47,6 +54,7 @@ export interface SpriteDefinition {
   readonly outerPad: number;
   readonly palette?: readonly (readonly [number, number, number])[];
   readonly animations: Readonly<Record<string, Animation>>;
+  readonly visualAnchors?: VisualAnchors;
 }
 export type StaticBody =
   | number
@@ -90,4 +98,9 @@ export interface CrustyV1 {
   outer_pad: number;
   animations: Record<string, AnimationRow>;
   original_image_palette?: readonly (readonly [number, number, number])[];
+}
+
+export interface CrustyV2 extends Omit<CrustyV1, "version"> {
+  version: 2;
+  visual_anchors?: VisualAnchors;
 }

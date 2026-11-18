@@ -6,6 +6,7 @@ export type {
   AnimationRow,
   AuthoringOptions,
   CrustyV1,
+  CrustyV2,
   DrawOptions,
   Facing,
   Instruction,
@@ -13,9 +14,11 @@ export type {
   SpriteDefinition,
   StaticBody,
   TimedBody,
+  VisualAnchor,
+  VisualAnchors,
 } from "./types.ts";
 export { parseCrusty, validateCrusty } from "./parse.ts";
-export { frameRect, validateAtlas } from "./atlas.ts";
+export { frameRect, resolveVisualAnchor, validateAtlas } from "./atlas.ts";
 export { SpritePlayer } from "./player.ts";
 export type {
   CompletionRecord,

@@ -1,5 +1,5 @@
 import { CrustyError, safeInteger } from "./errors.ts";
-import type { Rect, SpriteDefinition } from "./types.ts";
+import type { Rect, SpriteDefinition, VisualAnchor } from "./types.ts";
 
 export function frameRect(definition: SpriteDefinition, frame: number): Rect {
   safeInteger(frame, "frame");
@@ -15,6 +15,25 @@ export function frameRect(definition: SpriteDefinition, frame: number): Rect {
     width: definition.width,
     height: definition.height,
   });
+}
+
+/** Return a point in unscaled cell pixels for the given atlas frame. */
+export function resolveVisualAnchor(
+  definition: SpriteDefinition,
+  frame: number,
+  name: string,
+): VisualAnchor | undefined {
+  safeInteger(frame, "frame");
+  if (frame >= definition.frames) {
+    throw new CrustyError("validation", "Frame outside definition", "frame");
+  }
+  const anchors = definition.visualAnchors;
+  const overrides = anchors?.frames?.[frame];
+  if (overrides && Object.hasOwn(overrides, name)) return overrides[name];
+  if (anchors?.defaults && Object.hasOwn(anchors.defaults, name)) {
+    return anchors.defaults[name];
+  }
+  return undefined;
 }
 
 export function validateAtlas(

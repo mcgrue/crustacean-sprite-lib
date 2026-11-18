@@ -80,7 +80,7 @@ const malformed: [string, unknown][] = [
   ["null", null],
   ["array", []],
   ["missing version", { ...authored(), version: undefined }],
-  ["wrong version", { ...authored(), version: 2 }],
+  ["wrong version", { ...authored(), version: 3 }],
   ["case conflict", { ...authored(), VERSION: 1 }],
   ["alias conflict", { ...authored(), dims: { w: 2, width: 2, h: 2 } }],
   ["missing field", { ...authored(), inner_pad: undefined }],

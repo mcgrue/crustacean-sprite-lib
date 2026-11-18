@@ -1,9 +1,10 @@
 # crustacean-sprite-lib
 
-Crusty v1 parsing, deterministic animation playback, async loading and browser
-Canvas 2D rendering. Native TypeScript produces dependency-free ESM JavaScript
-with generated declarations and source maps. Package name:
-`crustacean-sprite-lib`; version `0.1.0`. Publication is deferred.
+Crusty v1 and v2 parsing, deterministic animation playback, async loading and
+browser Canvas 2D rendering. Native TypeScript produces dependency-free ESM
+JavaScript with generated declarations and source maps. Package name:
+`crustacean-sprite-lib` version `0.2.0` supports
+[format 2 and visual anchors](CHANGELOG.md).
 
 ## Install from GitHub
 

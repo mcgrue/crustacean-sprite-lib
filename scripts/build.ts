@@ -21,6 +21,7 @@ for (
     "package.json",
     "tsconfig.build.json",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE",
     "ASSET-ATTRIBUTION.md",
   ]
